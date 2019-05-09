@@ -1,15 +1,20 @@
 package com.example.practice1;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 /**
@@ -23,6 +28,7 @@ import android.view.ViewGroup;
 public class HomeFragment extends Fragment {
     ViewPager viewPager;
     CustomSwipeAdapter customSwipeAdapter;
+    Context ctx;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
    /* private static final String ARG_PARAM1 = "param1";
@@ -71,9 +77,16 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View v=inflater.inflate(R.layout.fragment_home,container,false);
+        viewPager=v.findViewById(R.id.viewPager);
+        customSwipeAdapter=new CustomSwipeAdapter(getContext());
+        viewPager.setAdapter(customSwipeAdapter);
+        Timer t=new Timer();
+        t.scheduleAtFixedRate(new MyTimerTask(),2000,4000);
+
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        return v;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -83,16 +96,12 @@ public class HomeFragment extends Fragment {
         }
     }*/      //by pooja andhale
 
-   /* @Override
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }*/     //by pooja andhale
+        ctx=context;
+
+    }     //by pooja andhale
 
    /* @Override
     public void onDetach() {
@@ -123,4 +132,140 @@ public class HomeFragment extends Fragment {
         viewPager.setAdapter(customSwipeAdapter);
 
     }
+
+    //class used to make all slides automatically sliding
+    public class MyTimerTask extends TimerTask
+    {
+        int rev=0;
+
+        @Override
+        public void run() {
+            //when we switch from one fragment to another getActivity() returns null to avoid that we should override onAttach() method in fragment through which Context parameter
+            //passed by application itself through which we can get fragmentActivity again
+            if(getActivity()==null)
+            {
+                FragmentActivity fa=(FragmentActivity)ctx;
+                fa.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        if((viewPager.getCurrentItem()==0)&&(rev==0))
+                            {
+
+                                viewPager.setCurrentItem(1);
+                                /*prepareDots(viewPager.getCurrentItem());*/
+                            }
+
+                            else if((viewPager.getCurrentItem())==1&&(rev==0))
+                            {
+                                viewPager.setCurrentItem(2);
+                                /*prepareDots(viewPager.getCurrentItem());*/
+                            }
+                            else if((viewPager.getCurrentItem()==2)&&(rev==0))
+                            {
+                                viewPager.setCurrentItem(3);
+                                /* prepareDots(viewPager.getCurrentItem());*/
+                                rev=1;
+                            }
+                            else if((viewPager.getCurrentItem()==3)&&(rev==1))
+                            {
+                                viewPager.setCurrentItem(2);
+                                /* prepareDots(viewPager.getCurrentItem());*/
+
+
+                            }
+                   /* else if((viewPager.getCurrentItem()==4)&&(rev==0))
+                    {
+                        viewPager.setCurrentItem(3);
+
+                        *//* prepareDots(viewPager.getCurrentItem());*//*
+                    }
+                    else if((viewPager.getCurrentItem()==3)&&(rev==1))
+                    {
+                        viewPager.setCurrentItem(2);
+                        *//* prepareDots(viewPager.getCurrentItem());*//*
+                    }*/
+                            else if((viewPager.getCurrentItem()==2)&&(rev==1))
+                            {
+                                viewPager.setCurrentItem(1);
+                                /*prepareDots(viewPager.getCurrentItem());*/
+                            }
+                            else if((viewPager.getCurrentItem()==1)&&(rev==1))
+                            {
+                                viewPager.setCurrentItem(0);
+                                rev=0;
+                                /*prepareDots(viewPager.getCurrentItem());*/
+                            }
+
+
+                        }
+
+
+                });
+            }
+           else
+            {
+                getActivity().runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+
+
+
+                        if((viewPager.getCurrentItem()==0)&&(rev==0))
+                        {
+
+                            viewPager.setCurrentItem(1);
+                            /*prepareDots(viewPager.getCurrentItem());*/
+                        }
+
+                        else if((viewPager.getCurrentItem())==1&&(rev==0))
+                        {
+                            viewPager.setCurrentItem(2);
+                            /*prepareDots(viewPager.getCurrentItem());*/
+                        }
+                        else if((viewPager.getCurrentItem()==2)&&(rev==0))
+                        {
+                            viewPager.setCurrentItem(3);
+                            /* prepareDots(viewPager.getCurrentItem());*/
+                            rev=1;
+                        }
+                        else if((viewPager.getCurrentItem()==3)&&(rev==1))
+                        {
+                            viewPager.setCurrentItem(2);
+                            /* prepareDots(viewPager.getCurrentItem());*/
+
+
+                        }
+                   /* else if((viewPager.getCurrentItem()==4)&&(rev==0))
+                    {
+                        viewPager.setCurrentItem(3);
+
+                        *//* prepareDots(viewPager.getCurrentItem());*//*
+                    }
+                    else if((viewPager.getCurrentItem()==3)&&(rev==1))
+                    {
+                        viewPager.setCurrentItem(2);
+                        *//* prepareDots(viewPager.getCurrentItem());*//*
+                    }*/
+                        else if((viewPager.getCurrentItem()==2)&&(rev==1))
+                        {
+                            viewPager.setCurrentItem(1);
+                            /*prepareDots(viewPager.getCurrentItem());*/
+                        }
+                        else if((viewPager.getCurrentItem()==1)&&(rev==1))
+                        {
+                            viewPager.setCurrentItem(0);
+                            rev=0;
+                            /*prepareDots(viewPager.getCurrentItem());*/
+                        }
+
+
+                    }
+
+                });
+            }
+
+        }
+}
 }
